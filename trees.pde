@@ -1,18 +1,24 @@
+
 Turtle turtle;
+
+float a = 0.0;
+
 
 void setup() {
   size(400, 300, P3D);
   turtle = new Turtle(";(0)#F;(4)F;;;;F,,,F;\\![F/FF+F/FF[\\F&F];[+F]-F]-;;[-/F&,F+F+F]");
+
 }
 
 void draw() {
   background(40);
-  translate(width/2, height, 0);
-  rotate(-PI/2);
+  translate(width/2, height - 10, 0);
+  rotateZ(-PI/2);
+  rotateX(a);    // Rotates the tree
   turtle.render();
+  
+  a += 0.01;
 }
-
-
 
 
 class Turtle {
@@ -66,6 +72,9 @@ class Turtle {
       }
       else if (c == '\\') {  // Rotate right around H axis
         rotateZ(-theta);
+      }
+      else if (c == '|') {  // Turn 180 around U axis
+        rotateZ(PI);
       }
       
       // Symbols for modeling structures
