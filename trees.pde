@@ -2,7 +2,7 @@ Turtle turtle;
 
 void setup() {
   size(400, 300, P3D);
-  turtle = new Turtle("!(2)FFFF\\![F/F-F]-[-F&F+F+F]");
+  turtle = new Turtle(";(0)#F;(4)F;;;;F,,,F;\\![F/FF+F/FF[\\F&F];[+F]-F]-;;[-/F&,F+F+F]");
 }
 
 void draw() {
@@ -19,16 +19,22 @@ class Turtle {
   String todraw;
   float len;
   float theta;
+  int stroke;
+  int strokeDelt = 1;
+  int colour;
+  int[] colourMap = {255, 240, 225, 210, 195, 180};
   
   Turtle(String s) {
     todraw = s;
     len = 20;
     theta = - PI/4;
+    stroke = 1;
+    colour = 0;
   }
   
   void render() {
-    stroke(255);
-    //strokeWeight(2);
+    stroke(colourMap[colour]);
+    strokeWeight(stroke);
     
     int i = 0;
     while (i < todraw.length()) {
@@ -71,15 +77,53 @@ class Turtle {
       }
       
       // Symbols for changing drawing attributes
-      else if (c == '!') {
+      else if (c == '#') {    // Set line width or increase by strokeDelt
         char d = todraw.charAt(i+1);
         if (d == '(') {
           int end = findClosingParen(todraw, i+1);
-          println(int(todraw.substring(i+2, end-1)));
-          strokeWeight(int(todraw.substring(i+2, end-1)));
+          stroke = int(todraw.substring(i+2, end));
+          i += end - i;
         } else {
-          strokeWeight(1);
+          stroke += strokeDelt;
         }
+        stroke = constrain(stroke, 1, 10);
+        strokeWeight(stroke);
+      }
+      else if (c == '!') {    // Set line width or decrease by strokeDelt
+        char d = todraw.charAt(i+1);
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          stroke = int(todraw.substring(i+2, end));
+          i += end - i;
+        } else {
+          stroke -= strokeDelt;
+        }
+        stroke = constrain(stroke, 1, 10);
+        strokeWeight(stroke);
+      }
+      else if (c == ';') {    // Set ind of colour map or increase ind
+        char d = todraw.charAt(i+1);
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          colour = int(todraw.substring(i+2, end));
+          i += end - i;
+        } else {
+          colour += 1;
+        }
+        colour = constrain(colour, 0, colourMap.length-1);
+        stroke(colourMap[colour]);
+      }
+      else if (c == ',') {    // Set ind of colour map or increase ind
+        char d = todraw.charAt(i+1);
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          colour = int(todraw.substring(i+2, end));
+          i += end - i;
+        } else {
+          colour -= 1;
+        }
+        colour = constrain(colour, 0, colourMap.length-1);
+        stroke(colourMap[colour]);
       }
       
       i++;
