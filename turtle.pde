@@ -7,12 +7,17 @@ class Turtle {
   int strokeDelt = 1;
   int colour;
   int[] colourMap = {255, 240, 225, 210, 195, 180, 165};
+  color green = #6A7F4E;
   
+  boolean leaves = true;
   boolean circular = true;
   int cir_sides = 6;
   
   Turtle(String s) {
     todraw = s;
+  }
+  
+  void reset() {
     len = 20;
     theta = - PI/6;
     stroke = 2;
@@ -24,9 +29,7 @@ class Turtle {
   }
   
   void render() {
-    fill(colourMap[colour+1]);
-    stroke(colourMap[colour]);
-    strokeWeight(stroke);
+    reset();
     
     int i = 0;
     while (i < todraw.length()) {
@@ -41,11 +44,17 @@ class Turtle {
       
       // Symbols for movement and drawing
       if (c == 'F') {       // Move one step forward and draw
+      
+        fill(colourMap[colour+1]);
+        stroke(colourMap[colour]);
+        strokeWeight(stroke);
+        
         if (circular) {
+          noStroke();
           pushMatrix();
           translate(len/2, 0, 0);
-          rotateZ(-PI/2);
-          if (d == ']') {
+          rotateZ(PI/2);
+          if (d == 'L' || d == ']') {
             cylinder(stroke/2, 0, len, cir_sides);
           } else {
             cylinder(stroke/2, stroke/2, len, cir_sides);
@@ -55,6 +64,15 @@ class Turtle {
           line(0, 0, 0, len, 0, 0);   
         }
         translate(len, 0, 0);
+      }   
+      else if (c == 'L') {
+        if (leaves) {
+          noStroke();
+          fill(green);
+          rect(-len/2, -len, len*2, len*2);
+          rotateX(PI/2);
+          rect(-len/2, -len, len*2, len*2);
+        }
       }
       
       // Symbols for orientation control
@@ -97,7 +115,7 @@ class Turtle {
         } else {
           stroke += strokeDelt;
         }
-        stroke = constrain(stroke, 1, 10);
+        stroke = constrain(stroke, 2,110);
         strokeWeight(stroke);
       }
       else if (c == '!') {    // Set line width or decrease by strokeDelt
@@ -108,7 +126,7 @@ class Turtle {
         } else {
           stroke -= strokeDelt;
         }
-        stroke = constrain(stroke, 1, 10);
+        stroke = constrain(stroke, 2,110);
         strokeWeight(stroke);
       }
       else if (c == ';') {    // Set ind of colour map or increase ind
