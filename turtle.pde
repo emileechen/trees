@@ -6,12 +6,14 @@ class Turtle {
   int stroke;
   int strokeDelt = 1;
   int colour;
-  int[] colourMap = {255, 240, 225, 210, 195, 180};
+  int[] colourMap = {255, 240, 225, 210, 195, 180, 165};
+  
+  boolean circular = true;
   
   Turtle(String s) {
     todraw = s;
     len = 20;
-    theta = - PI/4;
+    theta = - PI/6;
     stroke = 1;
     colour = 0;
   }
@@ -21,6 +23,7 @@ class Turtle {
   }
   
   void render() {
+    fill(colourMap[colour+1]);
     stroke(colourMap[colour]);
     strokeWeight(stroke);
     
@@ -32,7 +35,15 @@ class Turtle {
       
       // Symbols for movement and drawing
       if (c == 'F') {       // Move one step forward and draw
-        line(0, 0, 0, len, 0, 0);
+        if (circular) {
+          pushMatrix();
+          translate(len/2, 0, 0);
+          rotateZ(PI/2);
+          cylinder(stroke, stroke, len, 6);
+          popMatrix();
+        } else {
+          line(0, 0, 0, len, 0, 0);   
+        }
         translate(len, 0, 0);
       }
       
@@ -101,7 +112,7 @@ class Turtle {
         } else {
           colour += 1;
         }
-        colour = constrain(colour, 0, colourMap.length-1);
+        colour = constrain(colour, 0, colourMap.length-2);
         stroke(colourMap[colour]);
       }
       else if (c == ',') {    // Set ind of colour map or increase ind
@@ -113,7 +124,7 @@ class Turtle {
         } else {
           colour -= 1;
         }
-        colour = constrain(colour, 0, colourMap.length-1);
+        colour = constrain(colour, 0, colourMap.length-2);
         stroke(colourMap[colour]);
       }
       
@@ -135,4 +146,38 @@ int findClosingParen(String str, int ind) {
     i++;
   }
   return -1;
+}
+
+
+void cylinder(float r_bottom, float r_top, float h, int sides) {
+  float theta = TWO_PI / sides;
+
+  // Draw bottom circle
+  beginShape();
+  for (int i = 0; i < sides; i++) {
+    float x = cos(i * theta) * r_bottom;
+    float y = sin(i * theta) * r_bottom;
+    vertex(x, h/2, y);
+  }
+  endShape(CLOSE);
+  
+  // Draw top circle
+  beginShape();
+  for (int i = 0; i < sides; i++) {
+    float x = cos(i * theta) * r_top;
+    float y = sin(i * theta) * r_top;
+    vertex(x, -h/2, y);
+  }
+  endShape(CLOSE);
+  
+  beginShape(QUAD_STRIP);
+  for (int i = 0; i < sides+1; i++) {
+    float x_1 = cos(i * theta) * r_top;
+    float y_1 = sin(i * theta) * r_top;
+    float x_2 = cos(i * theta) * r_top;
+    float y_2 = sin(i * theta) * r_top;
+    vertex(x_1, h/2, y_1);
+    vertex(x_2, -h/2, y_2);
+  }
+  endShape(CLOSE);
 }
