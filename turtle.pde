@@ -9,12 +9,13 @@ class Turtle {
   int[] colourMap = {255, 240, 225, 210, 195, 180, 165};
   
   boolean circular = true;
+  int cir_sides = 6;
   
   Turtle(String s) {
     todraw = s;
     len = 20;
     theta = - PI/6;
-    stroke = 1;
+    stroke = 2;
     colour = 0;
   }
   
@@ -29,17 +30,26 @@ class Turtle {
     
     int i = 0;
     while (i < todraw.length()) {
-    //for (int i = 0; i < todraw.length(); i++) {
       
       char c = todraw.charAt(i);
+      char d = ' ';
+      
+      // Only check next char if not last char in string
+      if (i != todraw.length() -1) {
+        d = todraw.charAt(i+1);
+      }
       
       // Symbols for movement and drawing
       if (c == 'F') {       // Move one step forward and draw
         if (circular) {
           pushMatrix();
           translate(len/2, 0, 0);
-          rotateZ(PI/2);
-          cylinder(stroke, stroke, len, 6);
+          rotateZ(-PI/2);
+          if (d == ']') {
+            cylinder(stroke/2, 0, len, cir_sides);
+          } else {
+            cylinder(stroke/2, stroke/2, len, cir_sides);
+          }
           popMatrix();
         } else {
           line(0, 0, 0, len, 0, 0);   
@@ -80,7 +90,6 @@ class Turtle {
       
       // Symbols for changing drawing attributes
       else if (c == '#') {    // Set line width or increase by strokeDelt
-        char d = todraw.charAt(i+1);
         if (d == '(') {
           int end = findClosingParen(todraw, i+1);
           stroke = int(todraw.substring(i+2, end));
@@ -92,7 +101,6 @@ class Turtle {
         strokeWeight(stroke);
       }
       else if (c == '!') {    // Set line width or decrease by strokeDelt
-        char d = todraw.charAt(i+1);
         if (d == '(') {
           int end = findClosingParen(todraw, i+1);
           stroke = int(todraw.substring(i+2, end));
@@ -104,7 +112,6 @@ class Turtle {
         strokeWeight(stroke);
       }
       else if (c == ';') {    // Set ind of colour map or increase ind
-        char d = todraw.charAt(i+1);
         if (d == '(') {
           int end = findClosingParen(todraw, i+1);
           colour = int(todraw.substring(i+2, end));
@@ -116,7 +123,6 @@ class Turtle {
         stroke(colourMap[colour]);
       }
       else if (c == ',') {    // Set ind of colour map or increase ind
-        char d = todraw.charAt(i+1);
         if (d == '(') {
           int end = findClosingParen(todraw, i+1);
           colour = int(todraw.substring(i+2, end));
@@ -149,7 +155,7 @@ int findClosingParen(String str, int ind) {
 }
 
 
-void cylinder(float r_bottom, float r_top, float h, int sides) {
+void cylinder(float r_bottom, float r_top, float h, int sides) {  
   float theta = TWO_PI / sides;
 
   // Draw bottom circle
@@ -170,10 +176,10 @@ void cylinder(float r_bottom, float r_top, float h, int sides) {
   }
   endShape(CLOSE);
   
-  beginShape(QUAD_STRIP);
+  beginShape(TRIANGLE_STRIP);
   for (int i = 0; i < sides+1; i++) {
-    float x_1 = cos(i * theta) * r_top;
-    float y_1 = sin(i * theta) * r_top;
+    float x_1 = cos(i * theta) * r_bottom;
+    float y_1 = sin(i * theta) * r_bottom;
     float x_2 = cos(i * theta) * r_top;
     float y_2 = sin(i * theta) * r_top;
     vertex(x_1, h/2, y_1);
