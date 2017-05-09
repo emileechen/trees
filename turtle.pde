@@ -77,7 +77,14 @@ class Turtle {
       
       // Symbols for orientation control
       else if (c == '+') {  // Rotate left around U (y) axis 
-        rotateY(theta);
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          float t = float(todraw.substring(i+2, end));
+          rotateY(t);
+          i += end - i;
+        } else {
+          rotateY(theta);
+        }
       }
       else if (c == '-') {  // Rotate right around U axis
         rotateY(-theta);
@@ -115,7 +122,7 @@ class Turtle {
         } else {
           stroke += strokeDelt;
         }
-        stroke = constrain(stroke, 2,110);
+        stroke = constrain(stroke, 2, 10);
         strokeWeight(stroke);
       }
       else if (c == '!') {    // Set line width or decrease by strokeDelt
@@ -126,7 +133,7 @@ class Turtle {
         } else {
           stroke -= strokeDelt;
         }
-        stroke = constrain(stroke, 2,110);
+        stroke = constrain(stroke, 2, 10);
         strokeWeight(stroke);
       }
       else if (c == ';') {    // Set ind of colour map or increase ind

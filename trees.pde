@@ -10,13 +10,14 @@ boolean leaves = true;
 float spinTime = 0;
 float circularTime = 0;
 float leavesTime = 0;
+float resetTime = 0;
 float going = 7;
 
 float a = 0.0;
 
 
 void setup() {
-  size(600, 400, P3D);
+  size(800, 600, P3D);
   //turtle = new Turtle(";(0)#F;(4)F;;;;F,,,F;\\![F/FF+[F\\F][F/-FFF\\[F&F]];-F]-;;[-/F&,F+[F/FF]F+F]");
   //turtle = new Turtle("F[+F]F[-F]F[+F[+F]F[-F]F]F[+F]F[-F]F[-F[+F]F[-F]F]F[+F]F[-F]F");
     
@@ -62,6 +63,13 @@ void draw() {
     String status = leaves ? "ON" : "OFF";
     text("LEAVES " + status, width - 10, height - 10);
   }
+  // Write reset
+  if (resetTime >= 40) {
+    resetTime -= going;
+    fill(resetTime);
+    textAlign(RIGHT, BOTTOM);
+    text("RESET", width - 10, height - 10);
+  }
   
   translate(width/2, height - 10, 0);
   rotateZ(-PI/2);  // Rotate to tree points upwards
@@ -94,5 +102,10 @@ void keyPressed() {
     leaves = !leaves;
     turtle.leaves = leaves;
     leavesTime = 255;
+  }
+  else if (key == '0') {
+    lsystem.reset("F");
+    turtle.setSentence(lsystem.getSentence());
+    resetTime = 255;
   }
 }
