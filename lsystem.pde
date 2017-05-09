@@ -17,12 +17,14 @@ class Rule {
 
 
 class LSystem {
+  String seed;
   String sentence;
   Rule[] rules;
   int gen;
   int genCap = 4;
   
   LSystem(String axiom, Rule[] r) {
+    seed = axiom;
     sentence = axiom;
     rules = r;
     gen = 0;
@@ -56,6 +58,9 @@ class LSystem {
     }
   }
   
+  String getSeed() {
+    return seed;
+  }
   String getSentence() {
     return sentence;
   }

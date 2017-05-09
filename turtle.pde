@@ -4,7 +4,7 @@ class Turtle {
   float len;
   float theta;
   int stroke;
-  int strokeDelt = 1;
+  float strokeDelt = .5;
   int colour;
   int[] colourMap = {255, 240, 225, 210, 195, 180, 165};
   color green = #6A7F4E;
@@ -21,7 +21,7 @@ class Turtle {
   void reset() {
     len = 20;
     theta = - PI/6;
-    stroke = 2;
+    stroke = 6;
     colour = 0;
   }
   
@@ -72,6 +72,12 @@ class Turtle {
           fill(green);
           
           pushMatrix();
+          rotateZ(PI/2);
+          translate(-len, -len, 0);
+          image(leavesTex, 0, 0, len*2, len*2);
+          popMatrix();
+          pushMatrix();
+          rotateX(PI/2);
           rotateZ(PI/2);
           translate(-len, -len, 0);
           image(leavesTex, 0, 0, len*2, len*2);

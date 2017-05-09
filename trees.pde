@@ -4,6 +4,9 @@ Turtle turtle;
 
 PFont f;
 
+String seed;
+Rule[] ruleset;
+
 boolean spin = true;
 boolean circular = true;
 boolean leaves = true;
@@ -16,14 +19,18 @@ float going = 7;
 float a = 0.0;
 
 
+
 void setup() {
   size(800, 600, P3D);
-  //turtle = new Turtle(";(0)#F;(4)F;;;;F,,,F;\\![F/FF+[F\\F][F/-FFF\\[F&F]];-F]-;;[-/F&,F+[F/FF]F+F]");
-  //turtle = new Turtle("F[+F]F[-F]F[+F[+F]F[-F]F]F[+F]F[-F]F[-F[+F]F[-F]F]F[+F]F[-F]F");
+
+  // Configuration A
+  String seed_a = "F";
+  Rule[] ruleset_a = new Rule[1];
+  ruleset_a[0] = new Rule('F', ",F;[+FL]&F[\\FL]");
+  lsystem = new LSystem(seed_a, ruleset_a);
     
-  Rule[] ruleset = new Rule[1];
-  ruleset[0] = new Rule('F', ",F;![+FL]&F[\\FL]");
-  lsystem = new LSystem("F", ruleset);
+  //Rule[] ruleset = new Rule[1];
+  //ruleset[0] = new Rule('F', ",F;![+FL]&F[\\FL]");
   turtle = new Turtle(lsystem.getSentence());
   
   // Create font
@@ -38,6 +45,20 @@ void draw() {
   fill(200);
   textAlign(LEFT, BOTTOM);
   text("GEN: " + lsystem.gen, 10, height - 10);
+  
+  // Write seed
+  fill(200);
+  textAlign(LEFT, TOP);
+  text("SEED:", 10, 10);
+  text(lsystem.getSeed(), 80, 10);
+  
+  // Write rules
+  fill(200);
+  textAlign(LEFT, TOP);
+  text("RULES: ", 10, 35);
+  for (int i = 0; i < lsystem.rules.length; i++) {
+    text(lsystem.rules[i].getPre() + " -> " + lsystem.rules[i].getSuc(), 80, 35 + 20 * i); 
+  }
   
   // Write spinning status
   if (spinTime >= 40) {
@@ -71,7 +92,7 @@ void draw() {
     text("RESET", width - 10, height - 10);
   }
   
-  translate(width/2, height - 10, 0);
+  translate(width/2, height, -50);
   rotateZ(-PI/2);  // Rotate to tree points upwards
   rotateX(a);      // Rotates the tree
   turtle.render();
