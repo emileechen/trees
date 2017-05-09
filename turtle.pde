@@ -8,6 +8,7 @@ class Turtle {
   int colour;
   int[] colourMap = {255, 240, 225, 210, 195, 180, 165};
   color green = #6A7F4E;
+  PImage leavesTex = loadImage("leaves.png");
   
   boolean leaves = true;
   boolean circular = true;
@@ -69,9 +70,17 @@ class Turtle {
         if (leaves) {
           noStroke();
           fill(green);
-          rect(-len/2, -len, len*2, len*2);
-          rotateX(PI/2);
-          rect(-len/2, -len, len*2, len*2);
+          
+          pushMatrix();
+          rotateZ(PI/2);
+          translate(-len, -len, 0);
+          image(leavesTex, 0, 0, len*2, len*2);
+          popMatrix();
+          
+          //fill(green);
+          //rect(-len/2, -len, len*2, len*2);
+          //rotateX(PI/2);
+          //rect(-len/2, -len, len*2, len*2);
         }
       }
       
@@ -87,18 +96,58 @@ class Turtle {
         }
       }
       else if (c == '-') {  // Rotate right around U axis
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          float t = float(todraw.substring(i+2, end));
+          rotateY(-t);
+          i += end - i;
+        } else {
+          rotateY(-theta);
+        }
         rotateY(-theta);
       }
       else if (c == '&') {  // Pitch down around L (x) axis 
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          float t = float(todraw.substring(i+2, end));
+          rotateX(t);
+          i += end - i;
+        } else {
+          rotateX(theta);
+        }
         rotateX(theta);
       }
       else if (c == '^') {  // Rotate right around L axis
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          float t = float(todraw.substring(i+2, end));
+          rotateX(-t);
+          i += end - i;
+        } else {
+          rotateX(-theta);
+        }
         rotateX(-theta);
       }
       else if (c == '/') {  // Roll left around H (z) axis 
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          float t = float(todraw.substring(i+2, end));
+          rotateZ(t);
+          i += end - i;
+        } else {
+          rotateZ(theta);
+        }
         rotateZ(theta);
       }
       else if (c == '\\') {  // Rotate right around H axis
+        if (d == '(') {
+          int end = findClosingParen(todraw, i+1);
+          float t = float(todraw.substring(i+2, end));
+          rotateZ(-t);
+          i += end - i;
+        } else {
+          rotateZ(-theta);
+        }
         rotateZ(-theta);
       }
       else if (c == '|') {  // Turn 180 around U axis
