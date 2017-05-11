@@ -7,7 +7,7 @@ PFont f;
 String seed;
 Rule[] ruleset;
 LSystem[] lsystems = new LSystem[5];
-int lsysInd = 4;
+int lsysInd = 3;
 
 boolean spin = true;
 boolean circular = true;
@@ -21,7 +21,7 @@ float going = 7;
 float a = 0.0;
 
 void setup() {
-  size(800, 600, P3D);
+  size(960, 720, P3D);
 
   // Configuration A
   String seed_a = "F";
@@ -47,19 +47,19 @@ void setup() {
   LSystem lsystem_c = new LSystem(seed_c, ruleset_c, theta_c, 4, true, .9, 20, 1);
 
 
-  // change
+  // Balanced Tree
   String seed_d = "F";
-  float theta_d = radians(20);
+  float theta_d = radians(40);
   Rule[] ruleset_d = new Rule[1];
-  ruleset_d[0] = new Rule('F', "F[+F][-F]");
-  LSystem lsystem_d = new LSystem(seed_d, ruleset_d, theta_d, 10, true, .60, 20, 1);
+  ruleset_d[0] = new Rule('F', "F[+F][-F][F][/F][\\F]");
+  LSystem lsystem_d = new LSystem(seed_d, ruleset_d, theta_d, 7, true, .9, 80, 1);
 
   // Pythagorean Tree
   String seed_e = "F";
   float theta_e = radians(90);
   Rule[] ruleset_e = new Rule[1];
   ruleset_e[0] = new Rule('F', "F[+F][-F]");
-  LSystem lsystem_e = new LSystem(seed_e, ruleset_e, theta_e, 10, false, .7, 150, 0.091);
+  LSystem lsystem_e = new LSystem(seed_e, ruleset_e, theta_e, 10, false, .7, 150, 1.0/9.0);
   
   lsystems[0] = lsystem_a;
   lsystems[1] = lsystem_b;
@@ -69,7 +69,6 @@ void setup() {
   
   turtle = new Turtle();
   setLSystem(lsysInd);
-  // turtle = new Turtle(lsystem.getSentence(), lsystem.getTheta());
   
   // Create font
   f = createFont("FiraMono.tff", 16);
@@ -155,7 +154,6 @@ void keyPressed() {
   if (key == '2') {
     spin = !spin;
     spinTime = 255;
-    rotateX(0);      // Rotates the tree to straight angle
   }
   else if (key == '3') {
     circular = !circular;
@@ -171,6 +169,9 @@ void keyPressed() {
     lsystem.reset();
     turtle.setSentence(lsystem.getSentence());
     resetTime = 255;
+  }
+  else if (key == '9') {
+    a = PI / 2;
   }
 }
 

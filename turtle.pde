@@ -89,7 +89,7 @@ class Turtle {
       char c = todraw.charAt(i);
       char d = ' ';
       float b = lsys.getBalance() * max(0, (lsystem.gen - 1));
-      
+
       // Only check next char if not last char in string
       if (i != todraw.length() -1) {
         d = todraw.charAt(i+1);
@@ -142,7 +142,7 @@ class Turtle {
           i += end - i;
         } else {
           if (!lsystem.random) {
-            rotateY((currTheta / 2.0) * b);
+            rotateY(max(-45, (currTheta / 2.0) * b));
           } else {
             rotateY(currTheta);
           }
@@ -156,8 +156,7 @@ class Turtle {
           i += end - i;
         } else {
           if (!lsystem.random) {
-            rotateY(-currTheta * (1.0 - b));
-            // rotateY(-currTheta);
+            rotateY(-min(-45, currTheta * (1.0 - b)));
           } else {
             rotateY(-currTheta);
           }
