@@ -14,7 +14,7 @@ class Turtle {
   PImage leavesTex = loadImage("leaves.png");
   
   boolean leaves = true;
-  boolean circular = true;
+  boolean simple = false;
   int cir_sides = 6;
 
   Turtle() {
@@ -42,7 +42,7 @@ class Turtle {
     strokeWeight(stroke);
     
     float tlen = min(150.0, lsys.getLength() * 3.0);
-    if (circular) {
+    if (!simple) {
       noStroke();
       pushMatrix();
       translate(tlen/2, 0, 0);
@@ -59,19 +59,24 @@ class Turtle {
     noStroke();
     fill(green);
     
-    pushMatrix();
-    rotateZ(PI/2);
-    translate(-clen, -clen, 0);
-
-    float size = min(clen*2, 40);
-    image(leavesTex, 0, 0, clen*2, clen*2);
-    popMatrix();
-    pushMatrix();
-    rotateX(PI/2);
-    rotateZ(PI/2);
-    translate(-clen, -clen, 0);
-    image(leavesTex, 0, 0, clen*2, clen*2);
-    popMatrix();
+    if (simple) {
+      rect(-clen/2, -clen, clen*2, clen*2);
+      rotateX(PI/2);
+      rect(-clen/2, -clen, clen*2, clen*2);
+    } else {
+      pushMatrix();
+      rotateZ(PI/2);
+      translate(-clen, -clen, 0);
+      image(leavesTex, 0, 0, clen*2, clen*2);
+      popMatrix();
+      
+      pushMatrix();
+      rotateX(PI/2);
+      rotateZ(PI/2);
+      translate(-clen, -clen, 0);
+      image(leavesTex, 0, 0, clen*2, clen*2);
+      popMatrix();
+    }
   }
   
   void render() {
@@ -97,12 +102,11 @@ class Turtle {
       
       // Symbols for movement and drawing
       if (c == 'F') {       // Move one step forward and draw
-      
         fill(colourMap[colour+1]);
         stroke(colourMap[colour]);
         strokeWeight(stroke);
         
-        if (circular) {
+        if (!simple) {
           noStroke();
           pushMatrix();
           translate(clen/2, 0, 0);
@@ -119,17 +123,14 @@ class Turtle {
 
         translate(clen, 0, 0);
         if (g == lsys.gen && leaves) {
-          drawLeaves(clen);
+          if (leaves) {
+            drawLeaves(clen);
+          }
         }
-      }   
+      }
       else if (c == 'L') {
         if (leaves) {
           drawLeaves(clen);
-          
-          //fill(green);
-          //rect(-clen/2, -clen, clen*2, clen*2);
-          //rotateX(PI/2);
-          //rect(-clen/2, -clen, clen*2, clen*2);
         }
       }
       

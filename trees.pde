@@ -10,10 +10,10 @@ LSystem[] lsystems = new LSystem[5];
 int lsysInd = 3;
 
 boolean spin = true;
-boolean circular = true;
+boolean simple = false;
 boolean leaves = true;
 float spinTime = 0;
-float circularTime = 0;
+float simpleTime = 0;
 float leavesTime = 0;
 float resetTime = 0;
 float going = 7;
@@ -106,12 +106,12 @@ void draw() {
     text("SPINNING " + status, width - 10, height - 10);
   }
   // Write 3D status
-  if (circularTime >= 40) {
-    circularTime -= going;
-    fill(circularTime);
+  if (simpleTime >= 40) {
+    simpleTime -= going;
+    fill(simpleTime);
     textAlign(RIGHT, BOTTOM);
-    String status = circular ? "ON" : "OFF";
-    text("3D " + status, width - 10, height - 10);
+    String status = simple ? "ON" : "OFF";
+    text("SIMPLE " + status, width - 10, height - 10);
   }
   // Write leaves status
   if (leavesTime >= 40) {
@@ -156,9 +156,9 @@ void keyPressed() {
     spinTime = 255;
   }
   else if (key == '3') {
-    circular = !circular;
-    turtle.circular = circular;
-    circularTime = 255;
+    simple = !simple;
+    turtle.simple = simple;
+    simpleTime = 255;
   }
   else if (key == '4') {
     leaves = !leaves;
