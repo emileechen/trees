@@ -30,8 +30,8 @@ class LSystem {
     gen = 0;
   }
   
-  void reset(String axiom) {
-    sentence = axiom;
+  void reset() {
+    sentence = seed;
     gen = 0;
   }
   

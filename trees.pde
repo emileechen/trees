@@ -6,6 +6,8 @@ PFont f;
 
 String seed;
 Rule[] ruleset;
+LSystem[] lsystems = new LSystem[5];
+int lsysInd = 0;
 
 boolean spin = true;
 boolean circular = true;
@@ -27,10 +29,18 @@ void setup() {
   String seed_a = "F";
   Rule[] ruleset_a = new Rule[1];
   ruleset_a[0] = new Rule('F', ",F;[+FL]&F[\\FL]");
-  lsystem = new LSystem(seed_a, ruleset_a);
-    
-  //Rule[] ruleset = new Rule[1];
-  //ruleset[0] = new Rule('F', ",F;![+FL]&F[\\FL]");
+  LSystem lsystem_a = new LSystem(seed_a, ruleset_a);
+  
+  // Configuration B
+  String seed_b = "F";
+  Rule[] ruleset_b = new Rule[1];
+  ruleset_b[0] = new Rule('F', "FF+&[&\\FL]");
+  LSystem lsystem_b = new LSystem(seed_b, ruleset_b);
+  
+  lsystems[0] = lsystem_a;
+  lsystems[1] = lsystem_b;
+  
+  lsystem = lsystems[lsysInd];
   turtle = new Turtle(lsystem.getSentence());
   
   // Create font
@@ -111,22 +121,34 @@ void mousePressed() {
 
 void keyPressed() {
   if (key == '1') {
+    lsysInd = lsysInd + 1;
+    if (lsystems[lsysInd] == null) {
+      lsysInd = 0;
+    }
+    setLSystem(lsysInd);
+  }
+  if (key == '2') {
     spin = !spin;
     spinTime = 255;
   }
-  else if (key == '2') {
+  else if (key == '3') {
     circular = !circular;
     turtle.circular = circular;
     circularTime = 255;
   }
-  else if (key == '3') {
+  else if (key == '4') {
     leaves = !leaves;
     turtle.leaves = leaves;
     leavesTime = 255;
   }
   else if (key == '0') {
-    lsystem.reset("F");
+    lsystem.reset();
     turtle.setSentence(lsystem.getSentence());
     resetTime = 255;
   }
+}
+
+void setLSystem(int i) {
+  lsystem = lsystems[i];
+  turtle.setSentence(lsystem.getSentence());
 }
