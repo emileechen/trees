@@ -27,21 +27,23 @@ void setup() {
 
   // Configuration A
   String seed_a = "F";
+  float theta_a = PI/6;
   Rule[] ruleset_a = new Rule[1];
   ruleset_a[0] = new Rule('F', ",F;[+FL]&F[\\FL]");
-  LSystem lsystem_a = new LSystem(seed_a, ruleset_a);
+  LSystem lsystem_a = new LSystem(seed_a, ruleset_a, theta_a);
   
   // Configuration B
   String seed_b = "F";
+  float theta_b = PI/12;
   Rule[] ruleset_b = new Rule[1];
   ruleset_b[0] = new Rule('F', "FF+&[&\\FL]");
-  LSystem lsystem_b = new LSystem(seed_b, ruleset_b);
+  LSystem lsystem_b = new LSystem(seed_b, ruleset_b, theta_b);
   
   lsystems[0] = lsystem_a;
   lsystems[1] = lsystem_b;
   
   lsystem = lsystems[lsysInd];
-  turtle = new Turtle(lsystem.getSentence());
+  turtle = new Turtle(lsystem.getSentence(), lsystem.getTheta());
   
   // Create font
   f = createFont("FiraMono.tff", 16);

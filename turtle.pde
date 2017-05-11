@@ -3,6 +3,7 @@ class Turtle {
   String todraw;
   float len;
   float theta;
+  float currTheta;
   int stroke;
   float strokeDelt = .5;
   int colour;
@@ -14,13 +15,14 @@ class Turtle {
   boolean circular = true;
   int cir_sides = 6;
   
-  Turtle(String s) {
+  Turtle(String s, float t) {
     todraw = s;
+    theta = t;
   }
   
   void reset() {
     len = 20;
-    theta = - PI/6;
+    currTheta = - theta;
     stroke = 6;
     colour = 0;
   }
@@ -98,7 +100,7 @@ class Turtle {
           rotateY(t);
           i += end - i;
         } else {
-          rotateY(theta);
+          rotateY(currTheta);
         }
       }
       else if (c == '-') {  // Rotate right around U axis
@@ -108,9 +110,8 @@ class Turtle {
           rotateY(-t);
           i += end - i;
         } else {
-          rotateY(-theta);
+          rotateY(-currTheta);
         }
-        rotateY(-theta);
       }
       else if (c == '&') {  // Pitch down around L (x) axis 
         if (d == '(') {
@@ -119,9 +120,9 @@ class Turtle {
           rotateX(t);
           i += end - i;
         } else {
-          rotateX(theta);
+          rotateX(currTheta);
         }
-        rotateX(theta);
+        rotateX(currTheta);
       }
       else if (c == '^') {  // Rotate right around L axis
         if (d == '(') {
@@ -130,9 +131,9 @@ class Turtle {
           rotateX(-t);
           i += end - i;
         } else {
-          rotateX(-theta);
+          rotateX(-currTheta);
         }
-        rotateX(-theta);
+        rotateX(-currTheta);
       }
       else if (c == '/') {  // Roll left around H (z) axis 
         if (d == '(') {
@@ -141,9 +142,9 @@ class Turtle {
           rotateZ(t);
           i += end - i;
         } else {
-          rotateZ(theta);
+          rotateZ(currTheta);
         }
-        rotateZ(theta);
+        rotateZ(currTheta);
       }
       else if (c == '\\') {  // Rotate right around H axis
         if (d == '(') {
@@ -152,9 +153,9 @@ class Turtle {
           rotateZ(-t);
           i += end - i;
         } else {
-          rotateZ(-theta);
+          rotateZ(-currTheta);
         }
-        rotateZ(-theta);
+        rotateZ(-currTheta);
       }
       else if (c == '|') {  // Turn 180 around U axis
         rotateZ(PI);

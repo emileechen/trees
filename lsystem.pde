@@ -20,12 +20,14 @@ class LSystem {
   String seed;
   String sentence;
   Rule[] rules;
+  float theta;
   int gen;
   int genCap = 4;
   
-  LSystem(String axiom, Rule[] r) {
+  LSystem(String axiom, Rule[] r, float t) {
     seed = axiom;
     sentence = axiom;
+    theta = t;
     rules = r;
     gen = 0;
   }
@@ -64,6 +66,9 @@ class LSystem {
   String getSentence() {
     return sentence;
   }
+  float getTheta() {
+    return theta;
+  }
   
   void insertRandom() {
     int[] rotations = {'+', '-', '&', '^', '\\', '/'};
@@ -82,7 +87,7 @@ class LSystem {
         
         if (c == '+' || c == '-' || c == '&' || c == '^' || c == '\\' || c == '/') {
           if (d != '(') {
-            sentence = sentence.substring(0,j+1) + '(' + str(random(PI/20, PI/4)) + ')' + sentence.substring(j+1);
+            sentence = sentence.substring(0,j+1) + '(' + str(random(-theta/2, theta/2) + theta) + ')' + sentence.substring(j+1);
           }
         }
       }
