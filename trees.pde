@@ -27,22 +27,22 @@ void setup() {
   String seed_a = "F";
   float theta_a = PI/6;
   Rule[] ruleset_a = new Rule[1];
-  ruleset_a[0] = new Rule('F', ",F;[+FL]&F[\\FL]");
-  LSystem lsystem_a = new LSystem(seed_a, ruleset_a, theta_a, 4, true, .60, 20, 1);
+  ruleset_a[0] = new Rule('F', "F[+FL]&F[\\FL]");
+  LSystem lsystem_a = new LSystem(seed_a, ruleset_a, theta_a, 4, true, .70, 25, 1);
   
   // Configuration B
   String seed_b = "F";
   float theta_b = PI/12;
   Rule[] ruleset_b = new Rule[1];
   ruleset_b[0] = new Rule('F', "FF+&[&\\FL]");
-  LSystem lsystem_b = new LSystem(seed_b, ruleset_b, theta_b, 4, true, .80, 20, 1);
+  LSystem lsystem_b = new LSystem(seed_b, ruleset_b, theta_b, 5, true, .80, 20, 1);
 
 
   // Curling Tree
-  String seed_c = "XF";
+  String seed_c = "XXL";
   float theta_c = radians(25);
   Rule[] ruleset_c = new Rule[2];
-  ruleset_c[0] = new Rule('X', "F−[[XL]+X]+F[+FLX]−XL");
+  ruleset_c[0] = new Rule('X', "F−[&[XL]+X]+F[\\FLX]−XL");
   ruleset_c[1] = new Rule('F', "FF");
   LSystem lsystem_c = new LSystem(seed_c, ruleset_c, theta_c, 4, true, .9, 20, 1);
 

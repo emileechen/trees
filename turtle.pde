@@ -60,9 +60,9 @@ class Turtle {
     fill(green);
     
     if (simple) {
-      rect(-clen/2, -clen, clen*2, clen*2);
+      rect(-clen, -clen, clen*2, clen*2);
       rotateX(PI/2);
-      rect(-clen/2, -clen, clen*2, clen*2);
+      rect(-clen, -clen, clen*2, clen*2);
     } else {
       pushMatrix();
       rotateZ(PI/2);
