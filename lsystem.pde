@@ -22,13 +22,22 @@ class LSystem {
   Rule[] rules;
   float theta;
   int gen;
-  int genCap = 4;
+  int genCap;
+  boolean random;
+  float reduction;
+  float balance;
+  float length;
   
-  LSystem(String axiom, Rule[] r, float t) {
+  LSystem(String axiom, Rule[] r, float t, int cap, boolean rand, float p, float l, float b) {
     seed = axiom;
     sentence = axiom;
     theta = t;
     rules = r;
+    genCap = cap;
+    random = rand;
+    reduction = p;
+    length = l;
+    balance = b;
     gen = 0;
   }
   
@@ -55,7 +64,9 @@ class LSystem {
         
       }
       sentence = nextGen.toString();
-      insertRandom();
+      if (random) {
+        insertRandom();
+      }
       gen++;
     }
   }
@@ -63,13 +74,27 @@ class LSystem {
   String getSeed() {
     return seed;
   }
+
   String getSentence() {
     return sentence;
   }
+
   float getTheta() {
     return theta;
   }
-  
+
+  float getReduction() {
+    return reduction;
+  }  
+
+  float getLength() {
+    return length;
+  }
+
+  float getBalance() {
+    return balance;
+  }
+
   void insertRandom() {
     int[] rotations = {'+', '-', '&', '^', '\\', '/'};
     

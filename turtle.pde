@@ -1,8 +1,10 @@
 
 class Turtle {
+  LSystem lsys;
+
   String todraw;
-  float len;
   float theta;
+  float balance;
   float currTheta;
   int stroke;
   float strokeDelt = .5;
@@ -14,31 +16,79 @@ class Turtle {
   boolean leaves = true;
   boolean circular = true;
   int cir_sides = 6;
-  
-  Turtle(String s, float t) {
-    todraw = s;
-    theta = t;
+
+  Turtle() {
+
   }
   
   void reset() {
-    len = 20;
     currTheta = - theta;
-    stroke = 6;
+    stroke = 3;
     colour = 0;
   }
   
   void setSentence(String sentence) {
     todraw = sentence;
   }
+
+  void setLSystem(LSystem ls) {
+    lsys = ls;
+    todraw = ls.getSentence();
+  }
+
+  void drawTrunk() {
+    fill(colourMap[colour+1]);
+    stroke(colourMap[colour]);
+    strokeWeight(stroke);
+    
+    float tlen = min(150.0, lsys.getLength() * 3.0);
+    if (circular) {
+      noStroke();
+      pushMatrix();
+      translate(tlen/2, 0, 0);
+      rotateZ(PI/2);
+      cylinder(stroke/2, stroke/2, tlen, cir_sides);
+      popMatrix();
+    } else {
+      line(0, 0, 0, tlen, 0, 0);   
+    }
+    translate(tlen, 0, 0);
+  }
+
+  void drawLeaves(float clen) {
+    noStroke();
+    fill(green);
+    
+    pushMatrix();
+    rotateZ(PI/2);
+    translate(-clen, -clen, 0);
+
+    float size = min(clen*2, 40);
+    image(leavesTex, 0, 0, clen*2, clen*2);
+    popMatrix();
+    pushMatrix();
+    rotateX(PI/2);
+    rotateZ(PI/2);
+    translate(-clen, -clen, 0);
+    image(leavesTex, 0, 0, clen*2, clen*2);
+    popMatrix();
+  }
   
   void render() {
     reset();
     
+    float currTheta = -lsys.getTheta();
     int i = 0;
+    int g = 0;
+    float clen = lsys.getLength();
+
+    drawTrunk();
+
     while (i < todraw.length()) {
       
       char c = todraw.charAt(i);
       char d = ' ';
+      float b = lsys.getBalance() * max(0, (lsystem.gen - 1));
       
       // Only check next char if not last char in string
       if (i != todraw.length() -1) {
@@ -55,40 +105,31 @@ class Turtle {
         if (circular) {
           noStroke();
           pushMatrix();
-          translate(len/2, 0, 0);
+          translate(clen/2, 0, 0);
           rotateZ(PI/2);
           if (d == 'L' || d == ']') {
-            cylinder(stroke/2, 0, len, cir_sides);
+            cylinder(stroke/2, 0, clen, cir_sides);
           } else {
-            cylinder(stroke/2, stroke/2, len, cir_sides);
+            cylinder(stroke/2, stroke/2, clen, cir_sides);
           }
           popMatrix();
         } else {
-          line(0, 0, 0, len, 0, 0);   
+          line(0, 0, 0, clen, 0, 0);   
         }
-        translate(len, 0, 0);
+
+        translate(clen, 0, 0);
+        if (g == lsys.gen && leaves) {
+          drawLeaves(clen);
+        }
       }   
       else if (c == 'L') {
         if (leaves) {
-          noStroke();
-          fill(green);
-          
-          pushMatrix();
-          rotateZ(PI/2);
-          translate(-len, -len, 0);
-          image(leavesTex, 0, 0, len*2, len*2);
-          popMatrix();
-          pushMatrix();
-          rotateX(PI/2);
-          rotateZ(PI/2);
-          translate(-len, -len, 0);
-          image(leavesTex, 0, 0, len*2, len*2);
-          popMatrix();
+          drawLeaves(clen);
           
           //fill(green);
-          //rect(-len/2, -len, len*2, len*2);
+          //rect(-clen/2, -clen, clen*2, clen*2);
           //rotateX(PI/2);
-          //rect(-len/2, -len, len*2, len*2);
+          //rect(-clen/2, -clen, clen*2, clen*2);
         }
       }
       
@@ -100,7 +141,11 @@ class Turtle {
           rotateY(t);
           i += end - i;
         } else {
-          rotateY(currTheta);
+          if (!lsystem.random) {
+            rotateY((currTheta / 2.0) * b);
+          } else {
+            rotateY(currTheta);
+          }
         }
       }
       else if (c == '-') {  // Rotate right around U axis
@@ -110,7 +155,12 @@ class Turtle {
           rotateY(-t);
           i += end - i;
         } else {
-          rotateY(-currTheta);
+          if (!lsystem.random) {
+            rotateY(-currTheta * (1.0 - b));
+            // rotateY(-currTheta);
+          } else {
+            rotateY(-currTheta);
+          }
         }
       }
       else if (c == '&') {  // Pitch down around L (x) axis 
@@ -164,9 +214,13 @@ class Turtle {
       // Symbols for modeling structures
       else if (c == '[') {
         pushMatrix();
+        clen *= lsys.getReduction();
+        g++;
       }
       else if (c == ']') {
         popMatrix();
+        clen *= 1.0 / lsys.getReduction();
+        g--;
       }
       
       // Symbols for changing drawing attributes
@@ -218,7 +272,6 @@ class Turtle {
       i++;
     }
   }
-  
 }
 
 // Given string and index of opening paren, return index of closing paren
